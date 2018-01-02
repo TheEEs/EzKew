@@ -1,0 +1,236 @@
+[gd_scene load_steps=18 format=1]
+
+[ext_resource path="res://Scripts/Player_Scripts/player_script.gd" type="Script" id=1]
+[ext_resource path="res://Resources/Sprites/Alien sprites/5-point.png" type="Texture" id=2]
+[ext_resource path="res://Resources/Sprites/Alien sprites/alienPink_swim1.png" type="Texture" id=3]
+[ext_resource path="res://Resources/Sprites/Alien sprites/alienPink_swim2.png" type="Texture" id=4]
+[ext_resource path="res://Resources/Sprites/Alien sprites/alienYellow_swim1.png" type="Texture" id=5]
+[ext_resource path="res://Resources/Sprites/Alien sprites/alienYellow_swim2.png" type="Texture" id=6]
+[ext_resource path="res://Resources/Sprites/Alien sprites/alienBlue_swim1.png" type="Texture" id=7]
+[ext_resource path="res://Resources/Sprites/Alien sprites/alienBlue_swim2.png" type="Texture" id=8]
+[ext_resource path="res://Resources/Sprites/Alien sprites/alienGreen_swim1.png" type="Texture" id=9]
+[ext_resource path="res://Resources/Sprites/Alien sprites/alienGreen_swim2.png" type="Texture" id=10]
+[ext_resource path="res://Scenes/UI/UILayer.tscn" type="PackedScene" id=11]
+[ext_resource path="res://Resources/Sprites/UI/red_button11.png" type="Texture" id=12]
+[ext_resource path="res://Resources/Sprites/UI/red_button12.png" type="Texture" id=13]
+
+[sub_resource type="Animation" id=1]
+
+resource/name = "gain5point"
+length = 0.5
+loop = false
+step = 0.1
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:visibility/opacity")
+tracks/0/interp = 1
+tracks/0/imported = false
+tracks/0/keys = {
+"times": FloatArray( 0, 0.4, 0.5 ),
+"transitions": FloatArray( 1, 1, 1 ),
+"update": 0,
+"values": [ 0.0, 1.0, 0.0 ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath(".:transform/pos")
+tracks/1/interp = 1
+tracks/1/imported = false
+tracks/1/keys = {
+"times": FloatArray( 0, 0.5 ),
+"transitions": FloatArray( 1, 1 ),
+"update": 0,
+"values": [ Vector2( 0, -31 ), Vector2( 0, -81 ) ]
+}
+
+[sub_resource type="SpriteFrames" id=2]
+
+animations = [ {
+"frames": [ ExtResource( 3 ), ExtResource( 4 ) ],
+"loop": true,
+"name": "pink",
+"speed": 5.0
+}, {
+"frames": [ ExtResource( 5 ), ExtResource( 6 ) ],
+"loop": true,
+"name": "yellow",
+"speed": 5.0
+}, {
+"frames": [ ExtResource( 7 ), ExtResource( 8 ) ],
+"loop": true,
+"name": "blue",
+"speed": 5.0
+}, {
+"frames": [ ExtResource( 9 ), ExtResource( 10 ) ],
+"loop": true,
+"name": "green",
+"speed": 5.0
+} ]
+
+[sub_resource type="Animation" id=3]
+
+length = 1.0
+loop = false
+step = 0.1
+tracks/0/type = "value"
+tracks/0/path = NodePath("spite_swimming:transform/pos")
+tracks/0/interp = 1
+tracks/0/imported = false
+tracks/0/keys = {
+"times": FloatArray( 0, 0.5, 1 ),
+"transitions": FloatArray( 1, 1, 1 ),
+"update": 0,
+"values": [ Vector2( 0, 0 ), Vector2( 0, 8.76 ), Vector2( 0, 0 ) ]
+}
+
+[sub_resource type="CapsuleShape2D" id=4]
+
+custom_solver_bias = 0.0
+radius = 12.8634
+height = 24.5442
+
+[node name="Alien" type="KinematicBody2D"]
+
+input/pickable = false
+collision/layers = 1
+collision/mask = 1
+collision/margin = 0.08
+script/script = ExtResource( 1 )
+speed = 145
+create_enemies_interval = 1.6
+max_acceleration = 300
+maximum_enemies = 9
+minimum_enemies = 4
+acceleration_proportion = 0.489
+create_mashmallow_interval = 7
+
+[node name="+5point" type="Sprite" parent="."]
+
+visibility/opacity = 0.0
+transform/pos = Vector2( 0, -81 )
+transform/scale = Vector2( 0.4, 0.4 )
+texture = ExtResource( 2 )
+
+[node name="gain5point" type="AnimationPlayer" parent="+5point"]
+
+playback/process_mode = 1
+playback/default_blend_time = 0.0
+root/root = NodePath("..")
+anims/gain5point = SubResource( 1 )
+playback/active = true
+playback/speed = 1.0
+blend_times = [  ]
+autoplay = ""
+
+[node name="spite_swimming" type="AnimatedSprite" parent="."]
+
+transform/scale = Vector2( 0.9, 0.9 )
+frames = SubResource( 2 )
+animation = "green"
+frame = 1
+playing = true
+
+[node name="player-animation" type="AnimationPlayer" parent="."]
+
+playback/process_mode = 1
+playback/default_blend_time = 0.0
+root/root = NodePath("..")
+anims/floating = SubResource( 3 )
+playback/active = true
+playback/speed = 1.0
+blend_times = [  ]
+autoplay = ""
+
+[node name="hurt" type="Sprite" parent="."]
+
+visibility/visible = false
+transform/scale = Vector2( 0.9, 0.9 )
+
+[node name="collision_checker" type="Area2D" parent="."]
+
+input/pickable = true
+shapes/0/shape = SubResource( 4 )
+shapes/0/transform = Matrix32( 1.30019, 0, 0, 1.20149, -0.497024, -0.106142 )
+shapes/0/trigger = false
+gravity_vec = Vector2( 0, 1 )
+gravity = 98.0
+linear_damp = 0.1
+angular_damp = 1.0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="collision_checker"]
+
+transform/pos = Vector2( -0.497024, -0.106142 )
+transform/scale = Vector2( 1.30019, 1.20149 )
+shape = SubResource( 4 )
+trigger = false
+_update_shape_index = 0
+
+[node name="UI control" parent="." instance=ExtResource( 11 )]
+
+[node name="score_label" type="Label" parent="."]
+
+focus/ignore_mouse = true
+focus/stop_mouse = true
+size_flags/horizontal = 2
+size_flags/vertical = 0
+margin/left = -20.0
+margin/top = -60.0
+margin/right = 20.0
+margin/bottom = -46.0
+text = "0"
+align = 1
+percent_visible = 1.0
+lines_skipped = 0
+max_lines_visible = -1
+
+[node name="start_panel" type="CanvasLayer" parent="."]
+
+layer = 1
+offset = Vector2( 0, 0 )
+rotation = 0.0
+scale = Vector2( 1, 1 )
+
+[node name="start_button" type="TextureButton" parent="start_panel"]
+
+focus/ignore_mouse = false
+focus/stop_mouse = true
+size_flags/horizontal = 2
+size_flags/vertical = 2
+margin/left = 305.0
+margin/top = 482.0
+margin/right = 495.0
+margin/bottom = 531.0
+toggle_mode = false
+enabled_focus_mode = 2
+shortcut = null
+textures/normal = ExtResource( 12 )
+textures/pressed = ExtResource( 13 )
+params/resize_mode = 0
+params/stretch_mode = 0
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="Label" type="Label" parent="start_panel/start_button"]
+
+rect/scale = Vector2( 2, 2 )
+focus/ignore_mouse = true
+focus/stop_mouse = true
+size_flags/horizontal = 2
+size_flags/vertical = 0
+margin/left = 14.0
+margin/top = 10.0
+margin/right = 93.0
+margin/bottom = 24.0
+text = "Play"
+align = 1
+valign = 3
+percent_visible = 1.0
+lines_skipped = 0
+max_lines_visible = -1
+
+[connection signal="body_enter" from="collision_checker" to="." method="hit_something"]
+
+[connection signal="body_exit" from="collision_checker" to="." method="exit_enemy"]
+
+[connection signal="button_down" from="start_panel/start_button" to="." method="start_game"]
+
+

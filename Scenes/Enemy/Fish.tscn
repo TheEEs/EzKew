@@ -1,0 +1,68 @@
+[gd_scene load_steps=8 format=1]
+
+[ext_resource path="res://Scripts/Enemies/Fish.gd" type="Script" id=1]
+[ext_resource path="res://Resources/Sprites/Enemy sprites/fishPink.png" type="Texture" id=2]
+[ext_resource path="res://Resources/Sprites/Enemy sprites/fishPink_swim.png" type="Texture" id=3]
+[ext_resource path="res://Resources/Sprites/Enemy sprites/fishGreen.png" type="Texture" id=4]
+[ext_resource path="res://Resources/Sprites/Enemy sprites/fishGreen_swim.png" type="Texture" id=5]
+
+[sub_resource type="CapsuleShape2D" id=1]
+
+custom_solver_bias = 0.0
+radius = 12.4647
+height = 0.450714
+
+[sub_resource type="SpriteFrames" id=2]
+
+animations = [ {
+"frames": [  ],
+"loop": true,
+"name": "New Anim",
+"speed": 5.0
+}, {
+"frames": [ ExtResource( 2 ), ExtResource( 3 ) ],
+"loop": true,
+"name": "pinkfish",
+"speed": 5.0
+}, {
+"frames": [ ExtResource( 4 ), ExtResource( 5 ) ],
+"loop": true,
+"name": "greenfish",
+"speed": 5.0
+} ]
+
+[node name="Fish" type="KinematicBody2D" groups=[
+"enemies",
+]]
+
+input/pickable = false
+shapes/0/shape = SubResource( 1 )
+shapes/0/transform = Matrix32( 1.40739, 0, 0, 1, -1.80035, 0 )
+shapes/0/trigger = true
+collision/layers = 1
+collision/mask = 1
+collision/margin = 0.08
+script/script = ExtResource( 1 )
+__meta__ = {
+"_edit_group_": true
+}
+swim_direction = Vector2( 1, 1 )
+speed = 117
+
+[node name="anim-sprite" type="AnimatedSprite" parent="."]
+
+transform/scale = Vector2( 0.6, 0.6 )
+frames = SubResource( 2 )
+animation = "greenfish"
+frame = 1
+playing = true
+
+[node name="collision" type="CollisionShape2D" parent="."]
+
+transform/pos = Vector2( -1.80035, 0 )
+transform/scale = Vector2( 1.40739, 1 )
+shape = SubResource( 1 )
+trigger = true
+_update_shape_index = 0
+
+
